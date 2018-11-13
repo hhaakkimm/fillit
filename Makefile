@@ -3,37 +3,42 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dezzeddi <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: aabdrakh <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/04/28 14:26:29 by dezzeddi          #+#    #+#              #
-#    Updated: 2018/04/28 17:10:34 by dezzeddi         ###   ########.fr        #
+#    Created: 2018/11/12 19:50:20 by aabdrakh          #+#    #+#              #
+#    Updated: 2018/11/12 19:50:21 by aabdrakh         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = fillit
 
-FLAGS=-Wall -Wextra -Werror -g
+SRC = main.c solution.c validate.c map.c
 
-SRCS=main.c place_tet_on_map.c map.c read.c validation.c transform.c
-OBJ = $(patsubst %.c,%.o,$(SRCS))
+OBJ = $(SRC:.c=.o)
 
-.PHONY: all clean fclean re
+INC = -I includes
+
+LIBFT =	libft/libft.a
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	gcc -I libft/includes -L libft/ -lft $(FLAGS) $(OBJ) -o $(NAME)
+$(NAME): $(LIBFT) $(OBJ)
+		gcc -Wall -Wextra -Werror $(OBJ) -o $(NAME) $(LIBFT)
 
-$(OBJ):
-	make -C libft
-	gcc -I libft/includes -c $(FLAGS) $(SRCS)
+$(OBJ): $(LIBFT)
+		gcc -Wall -Wextra -Werror $(FLAGS) -c $(SRC)
+
+$(LIBFT):
+		make -C ./libft/
 
 clean:
-	make -C libft clean
-	rm -f $(OBJ)
+		rm -f $(OBJ)
+			make clean -C ./libft/
 
 fclean: clean
-	make -C libft fclean
-	rm -f $(NAME)
+		rm -f $(NAME)
+			make fclean -C ./libft/
 
 re: fclean all
+
+.PHONY : all, re, clean, flcean

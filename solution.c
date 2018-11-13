@@ -10,79 +10,79 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
-#include "libft/libft.h"
 #include "fillit.h"
 
-int		to_try(t_tetr *tetri, table *map, int x, int y)
+int		to_try(t_tetr *tetri, char **map, int x, int y)
 {
 	int i;
 	int j;
+	int a[2];
 
 	i = 0;
+	a[0] = x;
+	a[1] = y;
 	while (i < tetri->width)
 	{
 		j = 0;
 		while (j < tetri->height)
 		{
-			if (tetri->pos[j][i] == '#' && map->array[y + j][x + i] != '.')
+			if (tetri->pos[j][i] == '#' && map[y + j][x + i] != '.')
 				return (0);
 			j++;
 		}
 		i++;
 	}
-	set(tetri, map, x, y, tetri->letter);
+	set(tetri, map, a, tetri->letter);
 	return (1);
 }
 
-int		get_size(table *x)
+int		get_size(char **x)
 {
 	int i;
 
 	i = 0;
-	while (x->array[0][i])
+	while (x[0][i])
 		i++;
 	return (i);
 }
 
-int		solve_map(table *map, t_list *list)
+int		solve_map(char **map, t_list *list)
 {
-	int			x;
-	int			y;
 	int			sz;
+	int			a[2];
 	t_tetr		*tetri;
 
-	if (list == NULL)
-		return (1);
-	y = 0;
+	a[1] = 0;
 	sz = get_size(map);
 	tetri = (t_tetr *)(list->content);
-	while (y < sz - tetri->height + 1)
+	while (a[1] < sz - tetri->height + 1)
 	{
-		x = 0;
-		while (x < sz - tetri->width + 1)
+		a[0] = 0;
+		while (a[0] < sz - tetri->width + 1)
 		{
-			if (to_try(tetri, map, x, y))
+			if (to_try(tetri, map, a[0], a[1]))
 			{
-				if (solve_map(map, list->next))
+				if (!list->next || solve_map(map, list->next))
 					return (1);
 				else
-					set(tetri, map, x, y, '.');
+					set(tetri, map, a, '.');
 			}
-			x++;
+			a[0]++;
 		}
-		y++;
+		a[1]++;
 	}
 	return (0);
 }
 
-table	*solve(t_list *list)
+char	**solve(t_list *list)
 {
-	table	*map;
+	char	**map;
 	int		size;
 
 	size = ft_sqrt(ft_lstcount(list) * 4);
 	map = map_new(size);
+	if (!list)
+		return (map);
 	while (!solve_map(map, list))
 	{
 		size++;

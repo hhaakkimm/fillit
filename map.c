@@ -11,9 +11,8 @@
 /* ************************************************************************** */
 
 #include "fillit.h"
-#include "libft/libft.h"
 
-void	free_map(table *map)
+void	free_map(char **map)
 {
 	int i;
 	int sz;
@@ -22,29 +21,28 @@ void	free_map(table *map)
 	sz = get_size(map);
 	while (i < sz)
 	{
-		ft_memdel((void **)&(map->array[i]));
+		ft_memdel((void **)&(map[i]));
 		i++;
 	}
-	ft_memdel((void **)&(map->array));
+	ft_memdel((void **)&(map));
 	ft_memdel((void **)&map);
 }
 
-table	*map_new(int size)
+char	**map_new(int size)
 {
-	table	*map;
+	char	**map;
 	int		i;
 	int		j;
 
-	map = (table *)ft_memalloc(sizeof(table));
-	map->array = (char **)ft_memalloc(sizeof(char *) * size);
+	map = (char **)ft_memalloc(sizeof(char *) * size);
 	i = 0;
 	while (i < size)
 	{
-		map->array[i] = ft_strnew(size);
+		map[i] = ft_strnew(size);
 		j = 0;
 		while (j < size)
 		{
-			map->array[i][j] = '.';
+			map[i][j] = '.';
 			j++;
 		}
 		i++;
@@ -52,7 +50,7 @@ table	*map_new(int size)
 	return (map);
 }
 
-void	set(t_tetr *tetri, table *map, int x, int y, char c)
+void	set(t_tetr *tetri, char **map, int *a, char c)
 {
 	int i;
 	int j;
@@ -64,7 +62,7 @@ void	set(t_tetr *tetri, table *map, int x, int y, char c)
 		while (j < tetri->height)
 		{
 			if (tetri->pos[j][i] == '#')
-				map->array[y + j][x + i] = c;
+				map[a[1] + j][a[0] + i] = c;
 			j++;
 		}
 		i++;

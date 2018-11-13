@@ -5,14 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aabdrakh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/07 00:16:21 by aabdrakh          #+#    #+#             */
-/*   Updated: 2018/11/07 00:16:25 by aabdrakh         ###   ########.fr       */
+/*   Created: 2018/11/12 20:08:06 by aabdrakh          #+#    #+#             */
+/*   Updated: 2018/11/12 20:08:07 by aabdrakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <fcntl.h>
-#include "libft/libft.h"
 #include "fillit.h"
 
 void		reverse(t_list **alst)
@@ -75,13 +72,13 @@ t_tetr		*tetris_new(char **pos, int width, int height, char letter)
 	return (tetris);
 }
 
-int		main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
-	t_list	*list;
-	table	*map;
-	int		fd;
-	int		i;
-	int		sz;
+	t_list		*list;
+	char		**map;
+	int			fd;
+	int			i;
+	int			sz;
 
 	if (argc != 2)
 	{
@@ -91,14 +88,14 @@ int		main(int argc, char **argv)
 	fd = open(argv[1], O_RDONLY);
 	if (!(list = init(fd)))
 	{
-		ft_putstr("error\n");
+		ft_putstr("error");
 		return (1);
 	}
 	map = solve(list);
 	i = 0;
 	sz = get_size(map);
 	while (i < sz)
-		ft_putstr(map->array[i++]);
+		ft_putstr(map[i++]);
 	free_map(map);
 	free_list(list);
 	return (0);
