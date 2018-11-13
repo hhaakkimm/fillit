@@ -104,22 +104,23 @@ t_list	*init(int fd)
 {
 	char	buf[21];
 	int		let;
-	int		length;
+	int		l[2];
 	t_list	*list;
 	t_tetr	*tetris;
 
 	let = 0;
 	ft_memset(buf, '\0', 21);
 	list = NULL;
-	while ((length = read(fd, buf, 21)) >= 19)
+	while ((l[0] = read(fd, buf, 21)) >= 19)
 	{
-		if (valid(buf, length) || (tetris = get(buf, (let + 'A'))) == NULL)
+		l[1] = l[0];
+		if (valid(buf, l[0]) || (tetris = get(buf, (let + 'A'))) == NULL)
 			return (free_list(list));
 		ft_lstadd(&list, ft_lstnew(tetris, sizeof(t_tetr)));
 		ft_memdel((void **)&tetris);
 		let++;
 	}
-	if (length)
+	if (l[0] || l[1] != 20)
 	{
 		return (free_list(list));
 	}
